@@ -10,8 +10,8 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :stonekiller, StonekillerWeb.Endpoint,
-  http: [port: {:system, "PORT"}, compress: true],
-  url: [scheme: "http", host: System.get_env("HOST"), port: {:system, "PORT"}],
+  http: [port: 4000, compress: true],
+  url: [host: "ec2-54-225-205-121.compute-1.amazonaws.com", port: 4000],
   cache_static_manifest: "priv/static/cache_manifest.json",
   secret_key_base: System.get_env("SECRET_KEY_BASE"),
   code_reloader: false,

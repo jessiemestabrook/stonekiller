@@ -3,13 +3,13 @@
   "containerDefinitions": [
     {
       "name": "stonekiller",
-      "image": "patrickme/stonekiller",
+      "image": "patrickme/stonekiller:latest",
       "essential": true,
       "memory": 128,
       "portMappings": [
         {
-          "hostPort": 80,
-          "containerPort": 80
+          "hostPort": 4000,
+          "containerPort": 4000
         }
       ],
       "environment": [
@@ -39,11 +39,11 @@
         },
         {
           "name": "HOST",
-          "value": "stonekiller.website"
+          "value": "ec2-54-225-205-121.compute-1.amazonaws.com"
         },
         {
           "name": "PORT",
-          "value": "80"
+          "value": "4000"
         }
       ]
     }
