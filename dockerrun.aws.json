@@ -1,9 +1,19 @@
 {
-  "AWSEBDockerrunVersion": "1",
-  "Image": {
-    "Name": "patrickme/stonekiller"
-  },
-  "Ports": [
-    {"ContainerPort": "4000"}
+  "AWSEBDockerrunVersion": "2",
+  "containerDefinitions": [
+    {
+      "name": "stonekiller",
+      "image": "patrickme/stonekiller",
+      "environment": [
+        {
+          "name": "DATABASE_URL",
+          "value": "ecto://postgres:postgres@localhost/stonekiller_dev"
+        },
+        {
+          "name": "SECRET_KEY_BASE",
+          "value": "d+aCKPvJQVUBO55DxXF4ni0b3r+rVtwNNGs97A90cb6BgrNJZWN08+tDYtWR4cs7"
+        }
+      ]
+    }
   ]
 }
