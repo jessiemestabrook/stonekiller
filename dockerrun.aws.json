@@ -4,6 +4,12 @@
     {
       "name": "stonekiller",
       "image": "patrickme/stonekiller",
+      "portMappings": [
+        {
+          "hostPort": 4000,
+          "containerPort": 4000
+        }
+      ],
       "environment": [
         {
           "name": "DATABASE_URL",
