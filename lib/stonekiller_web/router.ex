@@ -15,8 +15,9 @@ defmodule StonekillerWeb.Router do
 
   scope "/", StonekillerWeb do
     pipe_through :browser
-
-    get "/", PageController, :index
+    # The new react driven route
+    get "/", PageController, :pwa
+    # get "/", PageController, :index
   end
 
   # Other scopes may use custom stacks.

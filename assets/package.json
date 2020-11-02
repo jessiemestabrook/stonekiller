@@ -15,7 +15,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && cpx \"./build/**\" \"../priv/static\" --clean",
+    "build": "react-scripts build && cpx \"./build/**\" \"../priv/static/build\" --clean",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
