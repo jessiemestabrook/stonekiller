@@ -17,9 +17,9 @@
       "entryPoint": [],
       "portMappings": [
         {
-          "hostPort": 4000,
+          "hostPort": 80,
           "protocol": "tcp",
-          "containerPort": 4000
+          "containerPort": 80
         }
       ],
       "command": [],
