@@ -5,6 +5,7 @@
       "name": "stonekiller",
       "image": "patrickme/stonekiller",
       "essential": true,
+      "memory": 128,
       "portMappings": [
         {
           "hostPort": 80,
