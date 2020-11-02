@@ -15,7 +15,6 @@ config :stonekiller, StonekillerWeb.Endpoint,
   cache_static_manifest: "priv/static/cache_manifest.json",
   secret_key_base: System.get_env("SECRET_KEY_BASE"),
   code_reloader: false,
-  cache_static_manifest: "priv/static/manifest.json",
   server: true
 
 config :stonekiller, Stonekiller.Repo,
