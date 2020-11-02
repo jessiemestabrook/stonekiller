@@ -11,7 +11,7 @@ use Mix.Config
 # before starting your production server.
 config :stonekiller, StonekillerWeb.Endpoint,
   http: [port: 4000, compress: true],
-  url: [scheme: "http", host: "ec2-54-225-205-121.compute-1.amazonaws.com", port: 4000],
+  url: [scheme: "http", host: "stonekiller.website", port: 80],
   cache_static_manifest: "priv/static/manifest.json",
   secret_key_base: System.get_env("SECRET_KEY_BASE"),
   code_reloader: false,
