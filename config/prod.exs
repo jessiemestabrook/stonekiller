@@ -12,7 +12,7 @@ use Mix.Config
 config :stonekiller, StonekillerWeb.Endpoint,
   http: [port: 4000, compress: true],
   url: [scheme: "http", host: "stonekiller.website", port: 80],
-  cache_static_manifest: "priv/static/manifest.json",
+  cache_static_manifest: "priv/static/build/manifest.json",
   secret_key_base: System.get_env("SECRET_KEY_BASE"),
   code_reloader: false,
   server: true
