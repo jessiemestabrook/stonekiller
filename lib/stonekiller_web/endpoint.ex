@@ -28,13 +28,13 @@ defmodule StonekillerWeb.Endpoint do
 
   plug Plug.Static,
     at: "/",
-    from: {:your_app, "priv/static/build"},
+    from: {:stonekiller, "priv/static/build"},
     gzip: false,
     only: ~w(asset-manifest.json favicon.ico manifest.json service-worker.js)
 
   plug Plug.Static,
     at: "/static",
-    from: {:your_app, "priv/static/build/static"},
+    from: {:stonekiller, "priv/static/build/static"},
     gzip: false
 
   # Code reloading can be explicitly enabled under the
