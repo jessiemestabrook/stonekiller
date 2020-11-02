@@ -22,15 +22,7 @@ defmodule StonekillerWeb.Endpoint do
   # when deploying your static files in production.
   plug Plug.Static,
     at: "/",
-    from: :stonekiller,
-    gzip: false,
-    only: ~w(css fonts images js favicon.ico robots.txt)
-
-  plug Plug.Static,
-    at: "/",
-    from: {:stonekiller, "priv/static/build"},
-    gzip: false,
-    only: ~w(asset-manifest.json favicon.ico manifest.json service-worker.js)
+    from: {:stonekiller, "priv/static/build"}
 
   plug Plug.Static,
     at: "/static",
