@@ -35,7 +35,10 @@ function App({audioContext, timerWorker}) {
   timerWorker.onmessage = function(e) {
     if (e.data === "tick") {
         scheduler(tempo);
-        setTimeRemaining(formatMilliseconds(1000*(480 - (audioContext.currentTime - timeStarted))));
+        const newTimeRemaining = formatMilliseconds(1000*(480 - (audioContext.currentTime - timeStarted)));
+        if (newTimeRemaining !== timeRemaining) {
+          setTimeRemaining(newTimeRemaining);
+        }
     } else {
       console.log("message: " + e.data);
     }
