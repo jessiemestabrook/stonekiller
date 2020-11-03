@@ -55,59 +55,9 @@ const props = {
   audioContext,
   timerWorker
 };
-// const clickAccentURL = 'https://metronome-audio-bucket.s3.amazonaws.com/click-accent.mp3';
-// const clickUnaccentURL = 'https://metronome-audio-bucket.s3.amazonaws.com/click-unaccent.mp3'
-// let clickAccentBuffer, clickUnaccentBuffer;;
 
 
-// function nextNote() {
-//   // Advance current note and time by a 16th note...
-//   var secondsPerBeat = 60.0 / tempo;    // Notice this picks up the CURRENT
-//                                         // tempo value to calculate beat length.
-//   nextNoteTime += secondsPerBeat;    // Add beat length to last beat time
 
-//   if (current16thNote == 3) {
-//       setCurrent16thNote(0);
-//   } else {
-//     setCurrent16thNote(current16thNote + 1);
-//   }
-// }
-
-// function scheduleNote( beatNumber, time ) {
-//   // push the note on the queue, even if we're not playing.
-//   notesInQueue.push( { note: beatNumber, time: time } );
-
-//   if ( (noteResolution==1) && (beatNumber%2))
-//       return; // we're not playing non-8th 16th notes
-//   if ( (noteResolution==2) && (beatNumber%4))
-//       return; // we're not playing non-quarter 8th notes
-
-//   // create an oscillator
-//   if (beatNumber % 4 === 0)    // beat 0 == high pitch
-//     playBuffer(clickAccentBuffer, time);
-//   else {
-//     playBuffer(clickUnaccentBuffer, time);
-//   }
-// }
-
-// function scheduler() {
-//   // while there are notes that will need to play before the next interval,
-//   // schedule them and advance the pointer.
-//   while (nextNoteTime < audioContext.currentTime + scheduleAheadTime ) {
-//       scheduleNote( current16thNote, nextNoteTime );
-//       nextNote();
-//   }
-// }
-
-// Set up the timer worker, which helps provide stability to the metronome
-
-
-// function playBuffer(audioBuffer, time) {
-//   const source = audioContext.createBufferSource();
-//   source.buffer = audioBuffer;
-//   source.connect(audioContext.destination);
-//   source.start(time);
-// }
 
 const lookahead = 25.0;
 timerWorker.postMessage({"interval":lookahead});
