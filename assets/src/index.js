@@ -3,10 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-// eslint-disable-next-line
-import TimerWorker from 'worker-loader!./metronome.worker.js';
 
-const timerWorker = new TimerWorker();
 
 var unlocked = false;
 var isPlaying = false;      // Are we currently playing?
@@ -106,24 +103,13 @@ const requestAnimFrame = (function(){
 // }
 
 
-const audioContext = new AudioContext();
 
-
-// Set up the timer worker, which helps provide stability to the metronome
-timerWorker.onmessage = function(e) {
-    if (e.data === "tick") {
-        // scheduler();
-    } else {
-      console.log("message: " + e.data);
-    }
-};
-timerWorker.postMessage({"interval":lookahead});
 
 
 
 ReactDOM.render(
   <React.StrictMode>
-    <App audioContext={audioContext}/>
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 );

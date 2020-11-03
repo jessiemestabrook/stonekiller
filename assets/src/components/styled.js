@@ -1,13 +1,14 @@
 import styled from '@emotion/styled';
 
 export const AppWrapper = styled.div`
-  background: #f7f7f7;
+  background: #fcfcfc;
   height: 100vh;
   width: 100vw;
   display: flex;
   align-items: center;
   justify-content: center;
 `;
+
 
 export const InterfaceWrapper = styled.div`
   display: flex;
@@ -21,7 +22,7 @@ export const StartButton = styled.button`
   font-size: 2rem;
   padding: 25px;
   cursor: pointer;
-  margin-top: 40px;
+  margin-top: 60px;
   background: #e6fff0;
   border-color: #eee;
   font-family: 'Roboto Mono', monospace;
@@ -34,6 +35,7 @@ export const ClockWrapper = styled.div`
   padding: 40px;
 
   font-family: 'Roboto Mono', monospace;
+  font-display: optional;
   font-weight: 100;
   background: #e6f1ff;
   user-select: none;
