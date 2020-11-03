@@ -57,7 +57,7 @@ function App({audioContext, timerWorker}) {
       .then(audioBuffer => {
         clickUnaccentBuffer = audioBuffer;
       });
-  }, []);
+  }, [audioContext]);
   // const [current16thNote, setCurrent16thNote] = useState(0);
   function nextNote(tempo) {
     // Advance current note and time by a 16th note...
@@ -112,17 +112,22 @@ function App({audioContext, timerWorker}) {
 
           <StartButton
             isPlaying={isPlaying}
-            disabled={isPlaying}
             onClick={() => {
+              if (isPlaying) {
+                setIsPlaying(false);
+                return timerWorker.postMessage("stop");
+              }
+              if (timeStarted === 0) {
+                audioContext.resume();
+                setTimeStarted(audioContext.currentTime);
+              }
               setIsPlaying(true);
-              audioContext.resume();
               nextNoteTime = audioContext.currentTime;
-              console.log('nextNoteTime is', nextNoteTime);
-              setTimeStarted(audioContext.currentTime);
               timerWorker.postMessage("start");
             }}
           >
-            begin
+            {isPlaying && 'pause'}
+            {!isPlaying && ((timeStarted > 0) ? 'resume' : 'start')}
           </StartButton>
       </InterfaceWrapper>
     </AppWrapper>
