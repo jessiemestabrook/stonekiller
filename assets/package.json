@@ -17,7 +17,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build && cpx \"./build/**\" \"../priv/static/build\" --clean",
-    "deploy": "MIX_ENV=prod mix release && docker build -t patrickme/stonekiller . && docker push patrickme/stonekiller:latest",
+    "deploy": "cd .. && MIX_ENV=prod mix release --overwrite && docker build -t patrickme/stonekiller . && docker push patrickme/stonekiller:latest && eb deploy",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
