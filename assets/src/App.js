@@ -1,22 +1,32 @@
-import logo from './logo.svg';
+import React, { useState } from 'react'
 import './App.css';
 
 function App() {
+
+  // App has three overall states -- "begin", "workout", and "done"
+  const [appState, setAppState] = useState('start');
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  // const [tempo, setTempo] = useState(120);
+
+  // const [current16thNote, setCurrent16thNote] = useState(0);
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h2>Ready to Practice</h2>
+        <button
+          style={{
+            padding: '20px',
+            fontSize: '2rem',
+            borderRadius: '23px'
+          }}
+
+          onClick={() => {
+            if (isPlaying) { setAppState("playing"); }
+            else { setAppState("playing")}
+          }}
+        >{isPlaying ? "stop" : "start"}</button>
       </header>
     </div>
   );
