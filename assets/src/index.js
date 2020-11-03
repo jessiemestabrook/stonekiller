@@ -118,6 +118,30 @@ timerWorker.onmessage = function(e) {
     }
 };
 timerWorker.postMessage({"interval":lookahead});
+timerWorker.postMessage("start");
+
+
+function playBuffer(audioBuffer) {
+  const source = audioContext.createBufferSource();
+  source.buffer = audioBuffer;
+  source.connect(audioContext.destination);
+  source.start();
+}
+
+const clickAccentURL = 'https://metronome-audio-bucket.s3.amazonaws.com/click-accent.mp3';
+const clickUnaccentURL = 'https://metronome-audio-bucket.s3.amazonaws.com/click-unaccent.mp3'
+
+
+let clickAccentBuffer, clickUnaccentBuffer;
+
+window.fetch(clickAccentURL)
+  .then(response => response.arrayBuffer())
+  .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
+  .then(audioBuffer => {
+    // playButton.disabled = false;
+    clickAccentBuffer = audioBuffer;
+    playBuffer(clickAccentBuffer);
+  });
 
 ReactDOM.render(
   <React.StrictMode>
