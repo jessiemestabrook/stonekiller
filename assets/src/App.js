@@ -27,6 +27,7 @@ function formatMilliseconds(ms) {
 
 function App({audioContext, timerWorker}) {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [hasEnded, setHasEnded] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState("08:00");
   const [timeStarted, setTimeStarted] = useState(0);
   const [tempo, setTempo] = useState(112);
@@ -35,8 +36,12 @@ function App({audioContext, timerWorker}) {
   timerWorker.onmessage = function(e) {
     if (e.data === "tick") {
         scheduler(tempo);
-        const newTimeRemaining = formatMilliseconds(1000*(480 - (audioContext.currentTime - timeStarted)));
-        if (newTimeRemaining !== timeRemaining) {
+        const newTimeRemaining = formatMilliseconds(1000*(10 - (audioContext.currentTime - timeStarted)));
+        if (newTimeRemaining === "00:00") {
+          timerWorker.postMessage("stop");
+          setTimeRemaining(newTimeRemaining);
+          setHasEnded(true);
+        } else if (newTimeRemaining !== timeRemaining) {
           setTimeRemaining(newTimeRemaining);
         }
     } else {
@@ -65,7 +70,7 @@ function App({audioContext, timerWorker}) {
                                           // tempo value to calculate beat length.
     nextNoteTime += secondsPerBeat;    // Add beat length to last beat time
 
-    if (beatNumber == 3) {
+    if (beatNumber === 3) {
       setBeatNumber(0);
     } else {
       setBeatNumber(beatNumber + 1);
@@ -107,10 +112,10 @@ function App({audioContext, timerWorker}) {
             readOnly={isPlaying}
             disabled={isPlaying}
           />
-          bpm
-        </BpmWrapper>
-
+            bpm
+          </BpmWrapper>
           <StartButton
+            disabled={hasEnded}
             isPlaying={isPlaying}
             onClick={() => {
               if (isPlaying) {
@@ -126,8 +131,9 @@ function App({audioContext, timerWorker}) {
               timerWorker.postMessage("start");
             }}
           >
-            {isPlaying && 'pause'}
-            {!isPlaying && ((timeStarted > 0) ? 'resume' : 'start')}
+            {hasEnded && 'nice work'}
+            {!hasEnded && isPlaying && 'pause'}
+            {!hasEnded && !isPlaying && ((timeStarted > 0) ? 'resume' : 'start')}
           </StartButton>
       </InterfaceWrapper>
     </AppWrapper>
