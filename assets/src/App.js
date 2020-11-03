@@ -36,7 +36,7 @@ function App({audioContext, timerWorker}) {
   timerWorker.onmessage = function(e) {
     if (e.data === "tick") {
         scheduler(tempo);
-        const newTimeRemaining = formatMilliseconds(1000*(10 - (audioContext.currentTime - timeStarted)));
+        const newTimeRemaining = formatMilliseconds(1000*(480 - (audioContext.currentTime - timeStarted)));
         if (newTimeRemaining === "00:00") {
           timerWorker.postMessage("stop");
           setTimeRemaining(newTimeRemaining);
