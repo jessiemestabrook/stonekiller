@@ -5,7 +5,8 @@ import {
   InterfaceWrapper,
   StartButton,
   ClockWrapper,
-  BpmWrapper
+  BpmWrapper,
+  BpmInput,
 } from './components/styled';
 
 const clickAccentURL = 'https://metronome-audio-bucket.s3.amazonaws.com/click-accent.mp3';
@@ -18,9 +19,7 @@ function App({ audioContext }) {
   // App has three overall states -- "begin", "workout", and "done"
   const [appState, setAppState] = useState('start');
   const [isPlaying, setIsPlaying] = useState(false);
-
   const [timeRemaining, setTimeRemaining] = useState("08:00");
-
   const [tempo, setTempo] = useState(112);
 
   function playBuffer(audioBuffer) {
@@ -56,7 +55,14 @@ function App({ audioContext }) {
     <AppWrapper>
       <InterfaceWrapper>
         <ClockWrapper>{ timeRemaining }</ClockWrapper>
-        <BpmWrapper>{ tempo } bpm</BpmWrapper>
+        <BpmWrapper>
+          <BpmInput
+            type="number"
+            value={tempo}
+            onChange={e => setTempo(e.target.value)}
+          />
+          bpm
+          </BpmWrapper>
         <StartButton>begin</StartButton>
       </InterfaceWrapper>
     </AppWrapper>

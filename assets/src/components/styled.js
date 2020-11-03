@@ -18,7 +18,7 @@ export const InterfaceWrapper = styled.div`
 `;
 
 export const StartButton = styled.button`
-  font-size: 3rem;
+  font-size: 2rem;
   padding: 25px;
   cursor: pointer;
   margin-top: 40px;
@@ -45,4 +45,14 @@ export const BpmWrapper = styled.div`
   font-size: 4rem;
   background: #fff0f4;
   user-select: none;
+  display: flex;
+`;
+
+export const BpmInput = styled.input`
+  border: none;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 4rem;
+  background: transparent;
+  width: 140px;
+  margin-right: 10px;
 `;
