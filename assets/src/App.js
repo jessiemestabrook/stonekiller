@@ -34,7 +34,7 @@ function App({audioContext, timerWorker}) {
 
   timerWorker.onmessage = function(e) {
     if (e.data === "tick") {
-        scheduler();
+        scheduler(tempo);
         setTimeRemaining(formatMilliseconds(1000*(480 - (audioContext.currentTime - timeStarted))));
     } else {
       console.log("message: " + e.data);
@@ -56,7 +56,7 @@ function App({audioContext, timerWorker}) {
       });
   }, []);
   // const [current16thNote, setCurrent16thNote] = useState(0);
-  function nextNote() {
+  function nextNote(tempo) {
     // Advance current note and time by a 16th note...
     var secondsPerBeat = 60.0 / tempo;    // Notice this picks up the CURRENT
                                           // tempo value to calculate beat length.
@@ -82,12 +82,12 @@ function App({audioContext, timerWorker}) {
     }
   }
 
-  function scheduler() {
+  function scheduler(tempo) {
     // while there are notes that will need to play before the next interval,
     // schedule them and advance the pointer.
     while (nextNoteTime < audioContext.currentTime + scheduleAheadTime ) {
         scheduleNote( beatNumber, nextNoteTime );
-        nextNote();
+        nextNote(tempo);
     }
   }
 
@@ -101,6 +101,8 @@ function App({audioContext, timerWorker}) {
             type="number"
             value={tempo}
             onChange={e => setTempo(e.target.value)}
+            readOnly={isPlaying}
+            disabled={isPlaying}
           />
           bpm
         </BpmWrapper>

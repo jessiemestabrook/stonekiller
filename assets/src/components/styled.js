@@ -57,4 +57,8 @@ export const BpmInput = styled.input`
   background: transparent;
   width: 140px;
   margin-right: 10px;
+
+  &:disabled {
+    color: black;
+  }
 `;
