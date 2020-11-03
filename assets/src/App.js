@@ -11,6 +11,16 @@ import {
 // eslint-disable-next-line
 import TimerWorker from 'worker-loader!./metronome.worker.js';
 
+
+var startTime;              // The start time of the entire sequence.
+var scheduleAheadTime = 0.1;    // How far ahead to schedule audio (sec)
+                            // This is calculated from lookahead, and overlaps
+                            // with next interval (in case the timer is late)
+let nextNoteTime = 0.0;     // when the next note is due.
+var noteResolution = 0;     // 0 == 16th, 1 == 8th, 2 == quarter note
+var notesInQueue = [];      // the notes that have been put into the web audio,
+                            // and may or may not have played yet. {note, time}
+
 const clickAccentURL = 'https://metronome-audio-bucket.s3.amazonaws.com/click-accent.mp3';
 const clickUnaccentURL = 'https://metronome-audio-bucket.s3.amazonaws.com/click-unaccent.mp3'
 
@@ -29,17 +39,57 @@ function App() {
   let clickAccentBuffer, clickUnaccentBuffer;;
   const timerWorker = new TimerWorker();
 
-  function playBuffer(audioBuffer) {
+  function playBuffer(audioBuffer, time) {
     const source = audioContext.createBufferSource();
     source.buffer = audioBuffer;
     source.connect(audioContext.destination);
-    source.start();
+    source.start(time);
   }
+
+  function nextNote() {
+    // Advance current note and time by a 16th note...
+    var secondsPerBeat = 60.0 / tempo;    // Notice this picks up the CURRENT
+                                          // tempo value to calculate beat length.
+    nextNoteTime += secondsPerBeat;    // Add beat length to last beat time
+
+    if (current16thNote == 3) {
+        setCurrent16thNote(0);
+    } else {
+      setCurrent16thNote(current16thNote + 1);
+    }
+  }
+
+  function scheduleNote( beatNumber, time ) {
+    // push the note on the queue, even if we're not playing.
+    notesInQueue.push( { note: beatNumber, time: time } );
+
+    if ( (noteResolution==1) && (beatNumber%2))
+        return; // we're not playing non-8th 16th notes
+    if ( (noteResolution==2) && (beatNumber%4))
+        return; // we're not playing non-quarter 8th notes
+
+    // create an oscillator
+    if (beatNumber % 4 === 0)    // beat 0 == high pitch
+      playBuffer(clickAccentBuffer, time);
+    else {
+      playBuffer(clickUnaccentBuffer, time);
+    }
+  }
+
+  function scheduler() {
+    // while there are notes that will need to play before the next interval,
+    // schedule them and advance the pointer.
+    while (nextNoteTime < audioContext.currentTime + scheduleAheadTime ) {
+        scheduleNote( current16thNote, nextNoteTime );
+        nextNote();
+    }
+  }
+
 
   // Set up the timer worker, which helps provide stability to the metronome
   timerWorker.onmessage = function(e) {
     if (e.data === "tick") {
-        // scheduler();
+        scheduler();
     } else {
       console.log("message: " + e.data);
     }
@@ -90,7 +140,7 @@ function App() {
         <StartButton
           onClick={() => {
             setIsPlaying(true);
-            playBuffer(clickAccentBuffer);
+            nextNoteTime = audioContext.currentTime;
             timerWorker.postMessage("start");
           }}
         >
