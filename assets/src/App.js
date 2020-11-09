@@ -28,8 +28,9 @@ function formatMilliseconds(ms) {
 function App({audioContext, timerWorker}) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasEnded, setHasEnded] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState("08:00");
-  const [timeStarted, setTimeStarted] = useState(0);
+  const [timeStarted, setTimeStarted] = useState(false);
   const [tempo, setTempo] = useState(112);
   const [beatNumber, setBeatNumber] = useState(0);
 
@@ -120,20 +121,22 @@ function App({audioContext, timerWorker}) {
             onClick={() => {
               if (isPlaying) {
                 setIsPlaying(false);
+                audioContext.suspend();
                 return timerWorker.postMessage("stop");
               }
-              if (timeStarted === 0) {
-                audioContext.resume();
+              if (!hasStarted) {
                 setTimeStarted(audioContext.currentTime);
+                setHasStarted(true);
               }
-              setIsPlaying(true);
               nextNoteTime = audioContext.currentTime;
+              audioContext.resume();
+              setIsPlaying(true);
               timerWorker.postMessage("start");
             }}
           >
             {hasEnded && 'nice work'}
             {!hasEnded && isPlaying && 'pause'}
-            {!hasEnded && !isPlaying && ((timeStarted > 0) ? 'resume' : 'start')}
+            {!hasEnded && !isPlaying && (hasStarted ? 'resume' : 'start')}
           </StartButton>
       </InterfaceWrapper>
     </AppWrapper>

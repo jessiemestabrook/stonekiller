@@ -3,21 +3,23 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {Socket} from 'phoenix'
+import socket from './socket';
 
 // eslint-disable-next-line
 import TimerWorker from 'worker-loader!./metronome.worker.js';
 
 // First, let's shim the requestAnimationFrame API, with a setTimeout fallback
-const requestAnimFrame = (function(){
-  return  window.requestAnimationFrame ||
-  window.webkitRequestAnimationFrame ||
-  window.mozRequestAnimationFrame ||
-  window.oRequestAnimationFrame ||
-  window.msRequestAnimationFrame ||
-  function( callback ){
-      window.setTimeout(callback, 1000 / 60);
-  };
-})();
+// const requestAnimFrame = (function(){
+//   return  window.requestAnimationFrame ||
+//   window.webkitRequestAnimationFrame ||
+//   window.mozRequestAnimationFrame ||
+//   window.oRequestAnimationFrame ||
+//   window.msRequestAnimationFrame ||
+//   function( callback ){
+//       window.setTimeout(callback, 1000 / 60);
+//   };
+// })();
 
 
 
