@@ -2,7 +2,7 @@ defmodule StonekillerWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", StonekillerWeb.RoomChannel
+  channel "room:*", StonekillerWeb.RoomChannel
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After
