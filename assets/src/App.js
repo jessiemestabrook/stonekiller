@@ -8,6 +8,7 @@ import {
   BpmWrapper,
   BpmInput,
 } from './components/styled';
+import ProgressBar from './components/ProgressBar';
 
 const clickAccentURL = 'https://metronome-audio-bucket.s3.amazonaws.com/click-accent.mp3';
 const clickUnaccentURL = 'https://metronome-audio-bucket.s3.amazonaws.com/click-unaccent.mp3'
@@ -30,6 +31,7 @@ function App({audioContext, timerWorker}) {
   const [hasEnded, setHasEnded] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState("08:00");
+  const [currentTime, setCurrentTime] = useState(0);
   const [timeStarted, setTimeStarted] = useState(false);
   const [tempo, setTempo] = useState(112);
   const [beatNumber, setBeatNumber] = useState(0);
@@ -37,6 +39,7 @@ function App({audioContext, timerWorker}) {
   timerWorker.onmessage = function(e) {
     if (e.data === "tick") {
         scheduler(tempo);
+        setCurrentTime((audioContext.currentTime - timeStarted))
         const newTimeRemaining = formatMilliseconds(1000*(480 - (audioContext.currentTime - timeStarted)));
         if (newTimeRemaining === "00:00") {
           timerWorker.postMessage("stop");
@@ -86,15 +89,13 @@ function App({audioContext, timerWorker}) {
   function scheduleNote( beatNumber, time ) {
     if (beatNumber === 0)    // beat 0 == high pitch
       playBuffer(clickAccentBuffer, time);
-    else {
-      playBuffer(clickUnaccentBuffer, time);
-    }
+    playBuffer(clickUnaccentBuffer, time);
   }
 
   function scheduler(tempo) {
     // while there are notes that will need to play before the next interval,
     // schedule them and advance the pointer.
-    while (nextNoteTime < audioContext.currentTime + scheduleAheadTime ) {
+    while (nextNoteTime < audioContext.currentTime + scheduleAheadTime && isPlaying) {
         scheduleNote( beatNumber, nextNoteTime );
         nextNote(tempo);
     }
@@ -105,6 +106,30 @@ function App({audioContext, timerWorker}) {
     <AppWrapper>
       <InterfaceWrapper>
         <ClockWrapper>{ timeRemaining }</ClockWrapper>
+        {/* <svg viewBox="0 0 500 60" xmlns="http://www.w3.org/2000/svg">
+          <defs></defs>
+          <rect x="0" y="0" width="500" height="60" style={{fill: "rgb(86, 255, 179)"}} />
+        </svg> */}
+        <ProgressBar
+          start={0}
+          end={120}
+          currentTime={currentTime}
+        />
+        <ProgressBar
+          start={120}
+          end={240}
+          currentTime={currentTime}
+        />
+        <ProgressBar
+          start={240}
+          end={360}
+          currentTime={currentTime}
+        />
+        <ProgressBar
+          start={360}
+          end={480}
+          currentTime={currentTime}
+        />
         <BpmWrapper>
           <BpmInput
             type="number"
@@ -113,31 +138,32 @@ function App({audioContext, timerWorker}) {
             readOnly={isPlaying}
             disabled={isPlaying}
           />
-            bpm
-          </BpmWrapper>
-          <StartButton
-            disabled={hasEnded}
-            isPlaying={isPlaying}
-            onClick={() => {
-              if (isPlaying) {
-                setIsPlaying(false);
-                audioContext.suspend();
-                return timerWorker.postMessage("stop");
-              }
-              if (!hasStarted) {
-                setTimeStarted(audioContext.currentTime);
-                setHasStarted(true);
-              }
-              nextNoteTime = audioContext.currentTime;
-              audioContext.resume();
-              setIsPlaying(true);
-              timerWorker.postMessage("start");
-            }}
-          >
-            {hasEnded && 'nice work'}
-            {!hasEnded && isPlaying && 'pause'}
-            {!hasEnded && !isPlaying && (hasStarted ? 'resume' : 'start')}
-          </StartButton>
+          bpm
+        </BpmWrapper>
+        <StartButton
+          disabled={hasEnded}
+          isPlaying={isPlaying}
+          onClick={() => {
+            if (isPlaying) {
+              setIsPlaying(false);
+              timerWorker.postMessage("stop");
+              audioContext.suspend();
+              return;
+            }
+            if (!hasStarted) {
+              setTimeStarted(audioContext.currentTime);
+              setHasStarted(true);
+            }
+            nextNoteTime = audioContext.currentTime;
+            audioContext.resume();
+            setIsPlaying(true);
+            timerWorker.postMessage("start");
+          }}
+        >
+          {hasEnded && 'nice work'}
+          {!hasEnded && isPlaying && 'pause'}
+          {!hasEnded && !isPlaying && (hasStarted ? 'resume' : 'start')}
+        </StartButton>
       </InterfaceWrapper>
     </AppWrapper>
   );
