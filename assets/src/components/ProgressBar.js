@@ -1,7 +1,7 @@
 import React from 'react'
 
 function ProgressBar({start, end, currentTime}) {
-  let percentage = 0;
+  let percentage = 0
   if (start < currentTime && end > currentTime) {
     percentage = ((currentTime - start) / (end - start))
   } else if (end < currentTime) {

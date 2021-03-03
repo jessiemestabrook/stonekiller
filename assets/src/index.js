@@ -3,11 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {Socket} from 'phoenix'
-import socket from './socket';
 
 // eslint-disable-next-line
 import TimerWorker from 'worker-loader!./metronome.worker.js';
+
 
 // First, let's shim the requestAnimationFrame API, with a setTimeout fallback
 // const requestAnimFrame = (function(){
@@ -61,7 +60,7 @@ const props = {
 
 
 
-const lookahead = 25.0;
+const lookahead = 1;
 timerWorker.postMessage({"interval":lookahead});
 
 
